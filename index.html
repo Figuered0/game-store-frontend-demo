@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXUS STORE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;600;700;800&family=Sora:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ─── HEADER ─────────────────────────────────────── -->
+  <header id="header">
+    <div class="header-inner">
+      <a class="logo" href="#store">NX<span>STORE</span></a>
+
+      <nav id="main-nav">
+        <a href="#store"    class="nav-link" data-view="store">Loja</a>
+        <a href="#wishlist" class="nav-link" data-view="wishlist">Desejos</a>
+        <a href="#history"  class="nav-link" data-view="history">Compras</a>
+        <a href="#cart"     class="nav-link nav-cart" data-view="cart">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span id="cart-badge" class="cart-badge hidden">0</span>
+        </a>
+      </nav>
+
+      <div id="user-area">
+        <button id="btn-login-open" class="btn btn-outline">Entrar</button>
+        <div id="user-info" class="hidden">
+          <span id="user-name-display" class="user-greeting"></span>
+          <button id="btn-logout" class="btn btn-ghost">Sair</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── MAIN VIEWS ─────────────────────────────────── -->
+  <main id="app">
+
+    <!-- VIEW: STORE ------------------------------------ -->
+    <section id="view-store" class="view">
+      <div class="store-hero">
+        <div class="hero-noise"></div>
+        <div class="hero-text container">
+          <p class="hero-eyebrow">Catálogo Digital</p>
+          <h1>Os melhores jogos.<br/><em>No melhor preço.</em></h1>
+          <p class="hero-sub">Catálogo atualizado com as maiores desenvolvedoras do mercado.</p>
+        </div>
+      </div>
+
+      <div class="store-controls container">
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="search-input" class="search-input" placeholder="Buscar título ou descrição..." />
+        </div>
+        <div id="category-filters" class="category-filters"></div>
+      </div>
+
+      <div id="store-loading" class="loading-state">
+        <div class="spinner"></div>
+        <span>Carregando jogos...</span>
+      </div>
+      <div id="games-grid" class="games-grid container hidden"></div>
+      <div id="store-empty" class="empty-state hidden">
+        <span class="empty-icon">🎮</span>
+        <p>Nenhum jogo encontrado para essa busca.</p>
+      </div>
+    </section>
+
+    <!-- VIEW: CART ------------------------------------- -->
+    <section id="view-cart" class="view hidden">
+      <div class="container">
+        <h2 class="view-title">Carrinho</h2>
+        <div id="cart-loading" class="loading-state"><div class="spinner"></div></div>
+        <div id="cart-content" class="cart-layout hidden">
+          <div id="cart-items" class="cart-items"></div>
+          <aside class="cart-summary">
+            <div class="summary-box">
+              <h3>Resumo</h3>
+              <div class="summary-row">
+                <span>Itens (<span id="cart-count-label">0</span>)</span>
+                <span id="cart-total-value" class="summary-total">R$ 0,00</span>
+              </div>
+              <button id="btn-checkout" class="btn btn-primary btn-lg w-full">Finalizar Compra</button>
+            </div>
+          </aside>
+        </div>
+        <div id="cart-empty" class="empty-state hidden">
+          <span class="empty-icon">🛒</span>
+          <p>Seu carrinho está vazio.</p>
+          <a href="#store" class="btn btn-outline">Ver jogos</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: WISHLIST --------------------------------- -->
+    <section id="view-wishlist" class="view hidden">
+      <div class="container">
+        <h2 class="view-title">Lista de Desejos</h2>
+        <div id="wishlist-loading" class="loading-state"><div class="spinner"></div></div>
+        <div id="wishlist-items" class="games-grid hidden"></div>
+        <div id="wishlist-empty" class="empty-state hidden">
+          <span class="empty-icon">♡</span>
+          <p>Sua lista de desejos está vazia.</p>
+          <a href="#store" class="btn btn-outline">Explorar jogos</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: HISTORY ---------------------------------- -->
+    <section id="view-history" class="view hidden">
+      <div class="container">
+        <h2 class="view-title">Histórico de Compras</h2>
+        <div id="history-loading" class="loading-state"><div class="spinner"></div></div>
+        <div id="history-items" class="history-list hidden"></div>
+        <div id="history-empty" class="empty-state hidden">
+          <span class="empty-icon">📦</span>
+          <p>Nenhuma compra realizada ainda.</p>
+          <a href="#store" class="btn btn-outline">Ir para a loja</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ─── MODAL: AUTH ───────────────────────────────── -->
+  <div id="modal-auth" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal">
+      <button class="modal-close" id="btn-auth-close" aria-label="Fechar">&times;</button>
+      <div class="auth-tabs" role="tablist">
+        <button class="auth-tab active" data-tab="login" role="tab">Entrar</button>
+        <button class="auth-tab" data-tab="register" role="tab">Criar conta</button>
+      </div>
+
+      <!-- Login -->
+      <div id="tab-login" class="auth-form">
+        <div class="form-group">
+          <label for="login-email">E-mail</label>
+          <input type="email" id="login-email" class="form-input" placeholder="seu@email.com" autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Senha</label>
+          <input type="password" id="login-password" class="form-input" placeholder="••••••••" autocomplete="current-password" />
+        </div>
+        <div id="login-error" class="form-error hidden"></div>
+        <button id="btn-login-submit" class="btn btn-primary w-full">Entrar</button>
+      </div>
+
+      <!-- Register -->
+      <div id="tab-register" class="auth-form hidden">
+        <div class="form-group">
+          <label for="register-nome">Nome completo</label>
+          <input type="text" id="register-nome" class="form-input" placeholder="João Silva" autocomplete="name" />
+        </div>
+        <div class="form-group">
+          <label for="register-email">E-mail</label>
+          <input type="email" id="register-email" class="form-input" placeholder="seu@email.com" autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label for="register-senha">Senha</label>
+          <input type="password" id="register-senha" class="form-input" placeholder="Mín. 8 caracteres" autocomplete="new-password" />
+        </div>
+        <div class="form-group">
+          <label for="register-dob">Data de nascimento</label>
+          <input type="date" id="register-dob" class="form-input" />
+        </div>
+        <div id="register-error" class="form-error hidden"></div>
+        <div id="register-success" class="form-success hidden"></div>
+        <button id="btn-register-submit" class="btn btn-primary w-full">Criar conta</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── MODAL: GAME DETAIL ────────────────────────── -->
+  <div id="modal-game" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal modal-wide">
+      <button class="modal-close" id="btn-game-close" aria-label="Fechar">&times;</button>
+      <div id="game-detail-content"></div>
+    </div>
+  </div>
+
+  <!-- ─── MODAL: CHECKOUT ───────────────────────────── -->
+  <div id="modal-checkout" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal">
+      <button class="modal-close" id="btn-checkout-close" aria-label="Fechar">&times;</button>
+      <h3 class="modal-title">Finalizar Compra</h3>
+
+      <div id="checkout-items-preview"></div>
+
+      <div class="payment-section">
+        <p class="payment-label">Método de pagamento</p>
+        <div class="payment-methods">
+          <button class="payment-btn active" data-method="cartao_credito">
+            <span class="payment-icon">💳</span>
+            <span>Cartão</span>
+          </button>
+          <button class="payment-btn" data-method="pix">
+            <span class="payment-icon">⚡</span>
+            <span>PIX</span>
+          </button>
+          <button class="payment-btn" data-method="boleto">
+            <span class="payment-icon">📄</span>
+            <span>Boleto</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="checkout-total-row">
+        Total: <strong id="checkout-total-display">R$ 0,00</strong>
+      </div>
+
+      <div id="checkout-error" class="form-error hidden"></div>
+      <button id="btn-confirm-checkout" class="btn btn-primary w-full btn-lg">Confirmar Pagamento</button>
+    </div>
+  </div>
+
+  <!-- ─── MODAL: SUCCESS ────────────────────────────── -->
+  <div id="modal-success" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal modal-sm">
+      <div class="success-icon-wrap">
+        <svg viewBox="0 0 52 52" class="checkmark" width="64" height="64">
+          <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+          <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+        </svg>
+      </div>
+      <h3 id="success-title" class="modal-title">Compra realizada!</h3>
+      <p id="success-message" class="success-body"></p>
+      <button id="btn-success-close" class="btn btn-primary w-full">Ver minhas compras</button>
+    </div>
+  </div>
+
+  <!-- ─── TOAST ─────────────────────────────────────── -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
