@@ -5,7 +5,7 @@
 'use strict';
 
 // ── CONFIG ──────────────────────────────────────────────
-const API_BASE = 'http://localhost:3000/api/v1';
+const API_BASE = 'https://api-vendas-jogos-digitais-k097.onrender.com';
 
 // ── STATE ───────────────────────────────────────────────
 const state = {
